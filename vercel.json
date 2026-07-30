@@ -1,0 +1,12 @@
+{
+  "rewrite": [
+    {
+      "source": "/api/backend/:path*",
+      "destination": "https://agentic-lead-engine.onrender.com/api/:path*"
+    }
+  ],
+  "env": {
+    "NEXT_PUBLIC_API_URL": "@backend_url",
+    "NEXT_PUBLIC_API_KEY": "@backend_api_key"
+  }
+}
