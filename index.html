@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PropertyVala — AI-Powered Real Estate Lead Generation</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --primary: #0066cc;
+  --primary-focus: #0071e3;
+  --primary-on-dark: #2997ff;
+  --ink: #1d1d1f;
+  --body: #1d1d1f;
+  --body-on-dark: #ffffff;
+  --body-muted: #cccccc;
+  --ink-muted-80: #333333;
+  --ink-muted-48: #7a7a7a;
+  --divider-soft: #f0f0f0;
+  --hairline: #e0e0e0;
+  --canvas: #ffffff;
+  --canvas-parchment: #f5f5f7;
+  --surface-pearl: #fafafc;
+  --surface-tile-1: #272729;
+  --surface-tile-2: #2a2a2c;
+  --surface-tile-3: #252527;
+  --surface-black: #000000;
+  --surface-chip: rgba(210, 210, 215, 0.64);
+  --on-primary: #ffffff;
+  --on-dark: #ffffff;
+  --shadow-product: rgba(0, 0, 0, 0.22) 3px 5px 30px 0;
+  --font-display: 'SF Pro Display', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-text: 'SF Pro Text', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-text);
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.47;
+  letter-spacing: -0.374px;
+  color: var(--ink);
+  background: var(--canvas);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--primary); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ===== GLOBAL NAV ===== */
+.global-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: var(--surface-black);
+  height: 44px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px;
+  font-family: var(--font-text);
+  font-size: 12px; font-weight: 400; letter-spacing: -0.12px;
+  color: var(--on-dark);
+}
+.global-nav .logo { font-weight: 600; font-size: 14px; letter-spacing: -0.02em; }
+.global-nav .nav-links { display: flex; gap: 24px; align-items: center; }
+.global-nav .nav-links a { color: var(--body-muted); font-size: 12px; letter-spacing: -0.12px; }
+.global-nav .nav-links a:hover { color: var(--on-dark); text-decoration: none; }
+.global-nav .nav-actions { display: flex; gap: 16px; align-items: center; }
+.global-nav .nav-actions a { color: var(--body-muted); font-size: 12px; }
+.global-nav .nav-actions a:hover { color: var(--on-dark); text-decoration: none; }
+
+/* ===== SUB NAV ===== */
+.sub-nav {
+  position: sticky; top: 44px; z-index: 999;
+  background: var(--canvas-parchment);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  height: 52px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px;
+  font-family: var(--font-display);
+  font-size: 21px; font-weight: 600; letter-spacing: 0.231px;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+.sub-nav .sub-nav-left { display: flex; align-items: center; gap: 24px; }
+.sub-nav .sub-nav-left span { color: var(--ink-muted-48); font-size: 14px; font-weight: 400; }
+.sub-nav .sub-nav-right { display: flex; gap: 20px; align-items: center; }
+.sub-nav .sub-nav-right a { color: var(--ink); font-size: 14px; font-weight: 400; }
+.sub-nav .sub-nav-right a:hover { color: var(--primary); text-decoration: none; }
+
+/* ===== BUTTONS ===== */
+.btn-primary {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--primary); color: var(--on-primary);
+  font-family: var(--font-text); font-size: 17px; font-weight: 400;
+  padding: 11px 22px; border-radius: 9999px;
+  border: none; cursor: pointer;
+  transition: transform 0.15s ease;
+  text-decoration: none;
+}
+.btn-primary:hover { text-decoration: none; opacity: 0.9; }
+.btn-primary:active { transform: scale(0.95); }
+
+.btn-secondary-pill {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: transparent; color: var(--primary);
+  font-family: var(--font-text); font-size: 17px; font-weight: 400;
+  padding: 11px 22px; border-radius: 9999px;
+  border: 1px solid var(--primary); cursor: pointer;
+  transition: transform 0.15s ease;
+  text-decoration: none;
+}
+.btn-secondary-pill:hover { text-decoration: none; }
+.btn-secondary-pill:active { transform: scale(0.95); }
+
+.btn-dark-utility {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--ink); color: var(--on-dark);
+  font-family: var(--font-text); font-size: 14px; font-weight: 400;
+  padding: 8px 15px; border-radius: 8px;
+  border: none; cursor: pointer;
+  transition: transform 0.15s ease;
+  text-decoration: none;
+}
+.btn-dark-utility:active { transform: scale(0.95); }
+
+/* ===== TILES ===== */
+.tile {
+  width: 100%;
+  padding: 80px 32px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.tile-light { background: var(--canvas); color: var(--ink); }
+.tile-parchment { background: var(--canvas-parchment); color: var(--ink); }
+.tile-dark { background: var(--surface-tile-1); color: var(--on-dark); }
+.tile-dark-2 { background: var(--surface-tile-2); color: var(--on-dark); }
+.tile-dark-3 { background: var(--surface-tile-3); color: var(--on-dark); }
+.tile-dark a { color: var(--primary-on-dark); }
+.tile-dark .btn-primary { background: var(--primary); color: var(--on-primary); }
+
+.tile h1 {
+  font-family: var(--font-display);
+  font-size: 56px; font-weight: 600; line-height: 1.07;
+  letter-spacing: -0.28px;
+  margin-bottom: 16px;
+}
+.tile h2 {
+  font-family: var(--font-display);
+  font-size: 40px; font-weight: 600; line-height: 1.1;
+  letter-spacing: 0;
+  margin-bottom: 16px;
+}
+.tile h3 {
+  font-family: var(--font-display);
+  font-size: 34px; font-weight: 600; line-height: 1.47;
+  letter-spacing: -0.374px;
+  margin-bottom: 12px;
+}
+.tile .lead {
+  font-family: var(--font-display);
+  font-size: 28px; font-weight: 400; line-height: 1.14;
+  letter-spacing: 0.196px;
+  margin-bottom: 24px;
+  color: var(--ink-muted-80);
+}
+.tile-dark .lead { color: var(--body-muted); }
+.tile .tagline {
+  font-family: var(--font-display);
+  font-size: 21px; font-weight: 600; line-height: 1.19;
+  letter-spacing: 0.231px;
+  margin-bottom: 32px;
+}
+.tile .body-text {
+  max-width: 680px;
+  font-size: 17px; font-weight: 400; line-height: 1.47;
+  letter-spacing: -0.374px;
+  margin-bottom: 32px;
+  color: var(--ink-muted-80);
+}
+.tile-dark .body-text { color: var(--body-muted); }
+
+.tile .cta-group { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+
+/* ===== PRODUCT 3D SCENE ===== */
+.product-scene {
+  perspective: 1200px;
+  width: 100%;
+  max-width: 600px;
+  height: 400px;
+  margin: 0 auto 48px;
+  display: flex; align-items: center; justify-content: center;
+}
+.product-card {
+  width: 320px; height: 220px;
+  background: linear-gradient(135deg, var(--surface-tile-1), var(--surface-tile-3));
+  border-radius: 18px;
+  box-shadow: var(--shadow-product);
+  display: flex; align-items: center; justify-content: center;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  cursor: grab;
+  position: relative;
+  overflow: hidden;
+}
+.product-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 50%);
+  border-radius: 18px;
+}
+.product-card:hover { transform: rotateY(8deg) rotateX(-4deg) scale(1.02); }
+.product-card:active { cursor: grabbing; transform: rotateY(0) rotateX(0) scale(0.98); }
+.product-card .card-icon {
+  font-size: 64px;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+}
+.product-card .card-label {
+  position: absolute; bottom: 20px; left: 20px; right: 20px;
+  font-family: var(--font-display); font-size: 14px; font-weight: 600;
+  color: var(--on-dark); letter-spacing: -0.1px;
+}
+.product-card .card-badge {
+  position: absolute; top: 16px; right: 16px;
+  background: var(--primary); color: var(--on-primary);
+  font-size: 10px; font-weight: 600;
+  padding: 4px 10px; border-radius: 9999px;
+  letter-spacing: 0.05em;
+}
+
+/* 3D FLOATING ANIMATION */
+@keyframes float3d {
+  0%, 100% { transform: translateY(0) rotateY(0deg) rotateX(0deg); }
+  25% { transform: translateY(-12px) rotateY(3deg) rotateX(-1deg); }
+  50% { transform: translateY(-6px) rotateY(-2deg) rotateX(1deg); }
+  75% { transform: translateY(-14px) rotateY(4deg) rotateX(-2deg); }
+}
+.product-card.float-anim {
+  animation: float3d 6s ease-in-out infinite;
+}
+.product-card.float-anim:hover { animation: none; transform: rotateY(8deg) rotateX(-4deg) scale(1.02); }
+
+/* 3D SPIN */
+@keyframes spin3d {
+  from { transform: rotateY(0deg) rotateX(5deg); }
+  to { transform: rotateY(360deg) rotateX(5deg); }
+}
+.spinner-3d {
+  width: 120px; height: 120px;
+  margin: 0 auto 32px;
+  transform-style: preserve-3d;
+  animation: spin3d 8s linear infinite;
+}
+.spinner-3d .face {
+  position: absolute;
+  width: 120px; height: 120px;
+  background: var(--surface-tile-1);
+  border: 1px solid rgba(255,255,255,0.06);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-size: 18px; font-weight: 600;
+  color: var(--on-dark);
+  border-radius: 12px;
+  box-shadow: var(--shadow-product);
+}
+.spinner-3d .face:nth-child(1) { transform: translateZ(60px); }
+.spinner-3d .face:nth-child(2) { transform: rotateY(180deg) translateZ(60px); }
+.spinner-3d .face:nth-child(3) { transform: rotateY(90deg) translateZ(60px); }
+.spinner-3d .face:nth-child(4) { transform: rotateY(-90deg) translateZ(60px); }
+.spinner-3d .face:nth-child(5) { transform: rotateX(90deg) translateZ(60px); }
+.spinner-3d .face:nth-child(6) { transform: rotateX(-90deg) translateZ(60px); }
+
+/* ===== FEATURE GRID ===== */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  max-width: 1100px;
+  width: 100%;
+  padding: 0 32px;
+}
+.feature-card {
+  background: var(--canvas);
+  border: 1px solid var(--hairline);
+  border-radius: 18px;
+  padding: 24px;
+  text-align: left;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+}
+.feature-card .feature-icon {
+  width: 48px; height: 48px;
+  background: var(--primary);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; color: var(--on-primary);
+  margin-bottom: 16px;
+}
+.feature-card h3 {
+  font-family: var(--font-display);
+  font-size: 21px; font-weight: 600; line-height: 1.19;
+  letter-spacing: 0.231px;
+  margin-bottom: 8px;
+}
+.feature-card p {
+  font-size: 17px; font-weight: 400; line-height: 1.47;
+  color: var(--ink-muted-80);
+}
+.tile-dark .feature-card { background: var(--surface-tile-1); border-color: rgba(255,255,255,0.06); }
+.tile-dark .feature-card p { color: var(--body-muted); }
+.tile-dark .feature-card h3 { color: var(--on-dark); }
+
+/* ===== STATS ROW ===== */
+.stats-row {
+  display: flex; gap: 48px; justify-content: center; flex-wrap: wrap;
+  padding: 48px 32px;
+}
+.stat { text-align: center; }
+.stat .stat-number {
+  font-family: var(--font-display);
+  font-size: 48px; font-weight: 600; line-height: 1.07;
+  letter-spacing: -0.28px;
+  color: var(--primary);
+}
+.tile-dark .stat .stat-number { color: var(--primary-on-dark); }
+.stat .stat-label {
+  font-size: 14px; font-weight: 400; line-height: 1.43;
+  color: var(--ink-muted-48);
+  margin-top: 4px;
+}
+.tile-dark .stat .stat-label { color: var(--body-muted); }
+
+/* ===== SCORING VISUAL ===== */
+.score-bar {
+  width: 100%; max-width: 400px;
+  height: 8px;
+  background: var(--divider-soft);
+  border-radius: 9999px;
+  overflow: hidden;
+  margin: 8px 0;
+}
+.score-bar .fill {
+  height: 100%;
+  border-radius: 9999px;
+  background: var(--primary);
+  transition: width 1s ease;
+}
+.score-bar .fill.hot { background: #ff3b30; }
+.score-bar .fill.warm { background: #ff9500; }
+.score-bar .fill.cold { background: var(--primary); }
+
+/* ===== FOOTER ===== */
+.footer {
+  background: var(--canvas-parchment);
+  padding: 64px 32px;
+  font-size: 12px; font-weight: 400; line-height: 1.3;
+  letter-spacing: -0.08px;
+  color: var(--ink-muted-48);
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 32px;
+  max-width: 1100px;
+  margin: 0 auto 32px;
+}
+.footer-grid h4 {
+  font-family: var(--font-text);
+  font-size: 14px; font-weight: 600; line-height: 1.29;
+  letter-spacing: -0.224px;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+.footer-grid a { color: var(--ink-muted-80); font-size: 14px; line-height: 2.41; display: block; }
+.footer-grid a:hover { color: var(--primary); text-decoration: none; }
+.footer-bottom {
+  border-top: 1px solid var(--hairline);
+  padding-top: 24px;
+  text-align: center;
+}
+
+/* ===== HERO 3D ===== */
+.hero-3d {
+  perspective: 1000px;
+  min-height: 600px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.hero-3d .hero-card {
+  width: 300px; height: 200px;
+  background: linear-gradient(145deg, var(--surface-tile-1), var(--surface-tile-2));
+  border-radius: 22px;
+  box-shadow: var(--shadow-product);
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column;
+  position: relative;
+}
+.hero-3d .hero-card .hero-card-icon {
+  font-size: 48px; margin-bottom: 12px;
+}
+.hero-3d .hero-card .hero-card-text {
+  font-family: var(--font-display);
+  font-size: 18px; font-weight: 600;
+  color: var(--on-dark);
+  letter-spacing: -0.1px;
+}
+
+/* ===== SCROLL REVEAL ===== */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1068px) {
+  .tile h1 { font-size: 40px; }
+  .tile h2 { font-size: 34px; }
+  .product-scene { height: 300px; }
+}
+@media (max-width: 834px) {
+  .global-nav .nav-links { display: none; }
+  .sub-nav { padding: 0 16px; }
+  .tile { padding: 48px 16px; }
+  .tile h1 { font-size: 34px; }
+  .feature-grid { grid-template-columns: 1fr; }
+  .stats-row { gap: 32px; }
+  .stat .stat-number { font-size: 36px; }
+}
+@media (max-width: 640px) {
+  .tile h1 { font-size: 28px; }
+  .tile .lead { font-size: 24px; }
+  .tile h3 { font-size: 28px; }
+  .product-scene { height: 240px; }
+  .product-card { width: 260px; height: 180px; }
+  .btn-primary, .btn-secondary-pill { font-size: 15px; padding: 10px 18px; }
+}
+@media (max-width: 419px) {
+  .tile h1 { font-size: 28px; }
+  .tile .lead { font-size: 20px; }
+  .stats-row { flex-direction: column; gap: 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== GLOBAL NAV ===== -->
+<nav class="global-nav">
+  <div class="logo">PropertyVala</div>
+  <div class="nav-links">
+    <a href="#how-it-works">How It Works</a>
+    <a href="#features">Features</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#dashboard">Dashboard</a>
+  </div>
+  <div class="nav-actions">
+    <a href="#contact">Contact</a>
+    <a href="#get-started" class="btn-primary" style="padding:6px 16px; font-size:12px;">Get Leads</a>
+  </div>
+</nav>
+
+<!-- ===== SUB NAV ===== -->
+<div class="sub-nav">
+  <div class="sub-nav-left">
+    <span>Real Estate</span>
+    <a href="#how-it-works">How It Works</a>
+    <a href="#features">Features</a>
+    <a href="#pricing">Pricing</a>
+  </div>
+  <div class="sub-nav-right">
+    <a href="#dashboard">Dashboard</a>
+    <a href="#get-started" class="btn-primary" style="padding:6px 16px; font-size:12px;">Get Started</a>
+  </div>
+</div>
+
+<!-- ===== HERO ===== -->
+<section class="tile tile-light" id="hero">
+  <div class="hero-3d">
+    <div class="hero-card float-anim" id="heroCard">
+      <div class="hero-card-icon">🏠</div>
+      <div class="hero-card-text">AI-Scored Leads</div>
+    </div>
+  </div>
+  <h1>Buyer Intent Leads<br>for Delhi NCR Real Estate</h1>
+  <p class="lead">AI-scored, verified, delivered fresh daily. Close more deals with qualified buyers.</p>
+  <div class="cta-group">
+    <a href="#get-started" class="btn-primary">Get 10 Free Leads</a>
+    <a href="#dashboard" class="btn-secondary-pill">View Dashboard</a>
+  </div>
+</section>
+
+<!-- ===== HOW IT WORKS ===== -->
+<section class="tile tile-parchment" id="how-it-works">
+  <h2>How It Works</h2>
+  <p class="body-text">Three steps from sign-up to your first qualified lead in your inbox.</p>
+  <div class="feature-grid" style="max-width:900px;">
+    <div class="feature-card reveal">
+      <div class="feature-icon">1</div>
+      <h3>Sign Up</h3>
+      <p>Create your agency account. Set your property type, budget range, and locations.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon">2</div>
+      <h3>Receive Leads</h3>
+      <p>Get 10–50 verified buyer-intent leads daily, scored 0–100 with HOT/WARM/COLD tiers.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon">3</div>
+      <h3>Close Deals</h3>
+      <p>Contact qualified buyers via WhatsApp or dashboard. Track conversions and commissions.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SCORING 3D VISUAL ===== -->
+<section class="tile tile-dark" id="scoring">
+  <h2>6-Factor AI Scoring</h2>
+  <p class="lead">Every lead scored 0–100 across six measurable factors.</p>
+  <div class="product-scene">
+    <div class="product-card float-anim" style="width:360px;height:260px;">
+      <div class="card-badge">AI SCORING</div>
+      <div class="card-icon" style="font-size:48px;">📊</div>
+      <div class="card-label">0–100 Score Breakdown</div>
+    </div>
+  </div>
+  <div style="max-width:400px; width:100%; text-align:left;">
+    <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:14px;">Contact Info</span><span style="font-size:14px;color:var(--primary-on-dark);">20 pts</span></div>
+    <div class="score-bar"><div class="fill" style="width:85%;"></div></div>
+    <div style="display:flex;justify-content:space-between;margin-bottom:4px;margin-top:12px;"><span style="font-size:14px;">Business Legitimacy</span><span style="font-size:14px;color:var(--primary-on-dark);">20 pts</span></div>
+    <div class="score-bar"><div class="fill" style="width:72%;"></div></div>
+    <div style="display:flex;justify-content:space-between;margin-bottom:4px;margin-top:12px;"><span style="font-size:14px;">Financial Indicators</span><span style="font-size:14px;color:var(--primary-on-dark);">15 pts</span></div>
+    <div class="score-bar"><div class="fill" style="width:60%;"></div></div>
+    <div style="display:flex;justify-content:space-between;margin-bottom:4px;margin-top:12px;"><span style="font-size:14px;">Engagement Readiness</span><span style="font-size:14px;color:var(--primary-on-dark);">15 pts</span></div>
+    <div class="score-bar"><div class="fill" style="width:48%;"></div></div>
+    <div style="display:flex;justify-content:space-between;margin-bottom:4px;margin-top:12px;"><span style="font-size:14px;">Market Demand</span><span style="font-size:14px;color:var(--primary-on-dark);">15 pts</span></div>
+    <div class="score-bar"><div class="fill" style="width:70%;"></div></div>
+    <div style="display:flex;justify-content:space-between;margin-bottom:4px;margin-top:12px;"><span style="font-size:14px;">Digital Presence</span><span style="font-size:14px;color:var(--primary-on-dark);">15 pts</span></div>
+    <div class="score-bar"><div class="fill" style="width:55%;"></div></div>
+  </div>
+  <div class="cta-group" style="margin-top:32px;">
+    <span style="display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border-radius:9999px;background:rgba(255,255,255,0.1);font-size:14px;">
+      <span style="width:8px;height:8px;border-radius:50%;background:#ff3b30;"></span> HOT ≥ 85
+    </span>
+    <span style="display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border-radius:9999px;background:rgba(255,255,255,0.1);font-size:14px;">
+      <span style="width:8px;height:8px;border-radius:50%;background:#ff9500;"></span> WARM 60–84
+    </span>
+    <span style="display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border-radius:9999px;background:rgba(255,255,255,0.1);font-size:14px;">
+      <span style="width:8px;height:8px;border-radius:50%;background:var(--primary);"></span> COLD &lt; 60
+    </span>
+  </div>
+</section>
+
+<!-- ===== FEATURES ===== -->
+<section class="tile tile-light" id="features">
+  <h2>Platform Features</h2>
+  <p class="body-text">Everything you need to manage, track, and convert real estate leads.</p>
+  <div class="feature-grid">
+    <div class="feature-card reveal">
+      <div class="feature-icon">🤖</div>
+      <h3>AI Lead Scoring</h3>
+      <p>6-factor model scores every lead 0–100 with transparent breakdown. HOT/WARM/COLD tiers for instant prioritization.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon">📱</div>
+      <h3>Mobile CRM Dashboard</h3>
+      <p>Swipe-style interface: Right (Hot), Left (Not Interested), Up (Maybe). Quick notes and bulk actions on every swipe.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon">💬</div>
+      <h3>WhatsApp Outreach</h3>
+      <p>50+ personalized message templates with retry logic and deduplication. Send to 50+ agencies in one click.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon">💰</div>
+      <h3>Commission Engine</h3>
+      <p>10% platform + 3% source splits. Automated late fees (2%/week), TDS deductions, and 60-day suspension enforcement.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon">📈</div>
+      <h3>Analytics Dashboard</h3>
+      <p>Contact rates, reply rates, conversion rates by source and score. Optimization suggestions based on performance gaps.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon">🔒</div>
+      <h3>Legal & Compliance</h3>
+      <p>Service agreements, lead buyer contracts, commission policies, and lead quality SLA included. GDPR compliant.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 3D PRODUCT SHOWCASE ===== -->
+<section class="tile tile-dark" id="product">
+  <h2>Agentic Lead Engine</h2>
+  <p class="lead">Modular AI microservices — 7 specialized agents working in concert.</p>
+  <div class="product-scene">
+    <div class="spinner-3d">
+      <div class="face">Leads</div>
+      <div class="face">Score</div>
+      <div class="face">Outreach</div>
+      <div class="face">Sales</div>
+      <div class="face">Analytics</div>
+      <div class="face">Commission</div>
+    </div>
+  </div>
+  <p class="body-text" style="max-width:600px;margin:0 auto 32px;">
+    Each agent handles one responsibility: sourcing, qualification, outreach, sales, analytics, conversion, and commission tracking. Connected via REST API with CSV persistence.
+  </p>
+  <div class="cta-group">
+    <a href="https://github.com/MrHTC/AGENTIC-LEAD-ENGINE" class="btn-secondary-pill">View on GitHub</a>
+    <a href="#dashboard" class="btn-primary">Open Dashboard</a>
+  </div>
+</section>
+
+<!-- ===== PRICING ===== -->
+<section class="tile tile-parchment" id="pricing">
+  <h2>Pricing</h2>
+  <p class="body-text">Transparent pricing. No hidden fees. Pay only for what you use.</p>
+  <div class="feature-grid" style="max-width:900px;">
+    <div class="feature-card reveal" style="text-align:center;">
+      <h3>Starter</h3>
+      <div style="font-size:48px;font-weight:600;margin:16px 0;">₹5,000<span style="font-size:17px;color:var(--ink-muted-48);">/mo</span></div>
+      <p>50 leads/month · Basic CRM · Email support</p>
+      <a href="#get-started" class="btn-primary" style="margin-top:16px;">Get Started</a>
+    </div>
+    <div class="feature-card reveal" style="text-align:center;border:2px solid var(--primary);">
+      <div style="background:var(--primary);color:var(--on-primary);font-size:10px;font-weight:600;padding:4px 12px;border-radius:9999px;display:inline-block;margin-bottom:12px;">MOST POPULAR</div>
+      <h3>Growth</h3>
+      <div style="font-size:48px;font-weight:600;margin:16px 0;">₹15,000<span style="font-size:17px;color:var(--ink-muted-48);">/mo</span></div>
+      <p>200 leads/month · Advanced analytics · API access · Priority support</p>
+      <a href="#get-started" class="btn-primary" style="margin-top:16px;">Get Started</a>
+    </div>
+    <div class="feature-card reveal" style="text-align:center;">
+      <h3>Enterprise</h3>
+      <div style="font-size:48px;font-weight:600;margin:16px 0;">Custom</div>
+      <p>Unlimited leads · Dedicated manager · SLA · Custom integrations</p>
+      <a href="#contact" class="btn-secondary-pill" style="margin-top:16px;">Contact Sales</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== STATS ===== -->
+<section class="tile tile-dark" id="stats">
+  <div class="stats-row">
+    <div class="stat">
+      <div class="stat-number">300+</div>
+      <div class="stat-label">Buyer-Intent Leads Processed</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">7</div>
+      <div class="stat-label">AI Microservices</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">0–100</div>
+      <div class="stat-label">AI Scoring Range</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">10%</div>
+      <div class="stat-label">Platform Commission</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DASHBOARD PREVIEW ===== -->
+<section class="tile tile-light" id="dashboard">
+  <h2>CRM Dashboard</h2>
+  <p class="body-text">Swipe-style lead management with real-time scoring and CRM actions.</p>
+  <div style="max-width:800px;width:100%;background:var(--surface-black);border-radius:18px;padding:24px;box-shadow:var(--shadow-product);">
+    <div style="display:flex;gap:8px;margin-bottom:16px;">
+      <span style="padding:4px 12px;border-radius:9999px;background:#ff3b30;color:#fff;font-size:12px;font-weight:600;">HOT</span>
+      <span style="padding:4px 12px;border-radius:9999px;background:#ff9500;color:#fff;font-size:12px;font-weight:600;">WARM</span>
+      <span style="padding:4px 12px;border-radius:9999px;background:var(--primary);color:#fff;font-size:12px;font-weight:600;">COLD</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--surface-tile-1);border-radius:11px;">
+        <div><span style="color:var(--on-dark);font-size:14px;font-weight:600;">ABC Realty</span><span style="color:var(--body-muted);font-size:12px;margin-left:8px;">Sector 62 Noida</span></div>
+        <span style="background:#ff3b30;color:#fff;padding:2px 10px;border-radius:9999px;font-size:11px;font-weight:600;">92 HOT</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--surface-tile-2);border-radius:11px;">
+        <div><span style="color:var(--on-dark);font-size:14px;font-weight:600;">Prime Properties</span><span style="color:var(--body-muted);font-size:12px;margin-left:8px;">Dwarka Delhi</span></div>
+        <span style="background:#ff9500;color:#fff;padding:2px 10px;border-radius:9999px;font-size:11px;font-weight:600;">74 WARM</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--surface-tile-3);border-radius:11px;">
+        <div><span style="color:var(--on-dark);font-size:14px;font-weight:600;">Metro Homes</span><span style="color:var(--body-muted);font-size:12px;margin-left:8px;">Gurgaon</span></div>
+        <span style="background:var(--primary);color:#fff;padding:2px 10px;border-radius:9999px;font-size:11px;font-weight:600;">45 COLD</span>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:16px;">
+      <span style="flex:1;padding:8px;background:#34c759;color:#fff;text-align:center;border-radius:8px;font-size:12px;font-weight:600;">✓ Interested</span>
+      <span style="flex:1;padding:8px;background:#ff3b30;color:#fff;text-align:center;border-radius:8px;font-size:12px;font-weight:600;">✗ Not Interested</span>
+      <span style="flex:1;padding:8px;background:#ff9500;color:#fff;text-align:center;border-radius:8px;font-size:12px;font-weight:600;">? Maybe</span>
+      <span style="flex:1;padding:8px;background:var(--primary);color:#fff;text-align:center;border-radius:8px;font-size:12px;font-weight:600;">↗ Follow Up</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="tile tile-dark" id="get-started">
+  <h2>Start Getting Qualified Leads</h2>
+  <p class="lead">Sign up today and receive your first 10 free buyer-intent leads for Delhi NCR.</p>
+  <div class="cta-group">
+    <a href="#contact" class="btn-primary">Get 10 Free Leads</a>
+    <a href="#dashboard" class="btn-secondary-pill">View Dashboard</a>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer" id="contact">
+  <div class="footer-grid">
+    <div>
+      <h4>Product</h4>
+      <a href="#how-it-works">How It Works</a>
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#dashboard">Dashboard</a>
+    </div>
+    <div>
+      <h4>Resources</h4>
+      <a href="https://github.com/MrHTC/AGENTIC-LEAD-ENGINE">GitHub</a>
+      <a href="https://github.com/MrHTC/PropertyVala-Website">Frontend Repo</a>
+      <a href="docs/dashboard_guide.html">Dashboard Guide</a>
+    </div>
+    <div>
+      <h4>Legal</h4>
+      <a href="docs/contracts/service_agreement.md">Service Agreement</a>
+      <a href="docs/contracts/lead_buyer_agreement.md">Lead Buyer Agreement</a>
+      <a href="docs/legal/terms_of_service.md">Terms of Service</a>
+      <a href="docs/legal/privacy_policy.md">Privacy Policy</a>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <a href="mailto:hrshtnvr@gmail.com">hrshtnvr@gmail.com</a>
+      <a href="tel:+918630982390">+91-8630982390</a>
+      <a href="https://www.linkedin.com/in/harshchaudharyy">LinkedIn</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    PropertyVala — AI-powered real estate lead generation. All rights reserved.
+  </div>
+</footer>
+
+<!-- ===== SCROLL REVEAL JS ===== -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+  reveals.forEach(function(el) { observer.observe(el); });
+
+  // 3D mouse tilt on hero card
+  var heroCard = document.getElementById('heroCard');
+  if (heroCard) {
+    heroCard.addEventListener('mousemove', function(e) {
+      var rect = heroCard.getBoundingClientRect();
+      var x = e.clientX - rect.left;
+      var y = e.clientY - rect.top;
+      var centerX = rect.width / 2;
+      var centerY = rect.height / 2;
+      var rotateY = ((x - centerX) / centerX) * 12;
+      var rotateX = ((centerY - y) / centerY) * 8;
+      heroCard.style.transform = 'rotateY(' + rotateY + 'deg) rotateX(' + rotateX + 'deg) scale(1.03)';
+    });
+    heroCard.addEventListener('mouseleave', function() {
+      heroCard.style.transform = '';
+    });
+  }
+
+  // Smooth scroll for nav links
+  document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      var target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>
