@@ -486,13 +486,18 @@ a:hover { text-decoration: underline; }
 
 <!-- ===== HERO ===== -->
 <section class="tile tile-light" id="hero">
-  <div class="hero-3d">
-    <div class="hero-card float-anim" id="heroCard">
-      <div class="hero-card-icon">🏠</div>
-      <div class="hero-card-text">AI-Scored Leads</div>
+  <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:48px;width:100%;max-width:1100px;">
+    <div class="hero-3d" style="flex:1 1 400px;">
+      <div class="hero-card float-anim" id="heroCard">
+        <div class="hero-card-icon">🏠</div>
+        <div class="hero-card-text">AI-Scored Leads</div>
+      </div>
+    </div>
+    <div style="flex:1 1 400px;text-align:left;">
+      <img src="images/screenshot-overview.png" alt="PropertyVala Overview" style="width:100%;max-width:520px;border-radius:18px;box-shadow: var(--shadow-product);" />
     </div>
   </div>
-  <h1>Buyer Intent Leads<br>for Delhi NCR Real Estate</h1>
+  <h1 style="margin-top:48px;">Buyer Intent Leads<br>for Delhi NCR Real Estate</h1>
   <p class="lead">AI-scored, verified, delivered fresh daily. Close more deals with qualified buyers.</p>
   <div class="cta-group">
     <a href="#get-started" class="btn-primary">Get 10 Free Leads</a>
@@ -530,24 +535,10 @@ a:hover { text-decoration: underline; }
   <div class="product-scene">
     <div class="product-card float-anim" style="width:360px;height:260px;">
       <div class="card-badge">AI SCORING</div>
-      <div class="card-icon" style="font-size:48px;">📊</div>
       <div class="card-label">0–100 Score Breakdown</div>
     </div>
   </div>
-  <div style="max-width:400px; width:100%; text-align:left;">
-    <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:14px;">Contact Info</span><span style="font-size:14px;color:var(--primary-on-dark);">20 pts</span></div>
-    <div class="score-bar"><div class="fill" style="width:85%;"></div></div>
-    <div style="display:flex;justify-content:space-between;margin-bottom:4px;margin-top:12px;"><span style="font-size:14px;">Business Legitimacy</span><span style="font-size:14px;color:var(--primary-on-dark);">20 pts</span></div>
-    <div class="score-bar"><div class="fill" style="width:72%;"></div></div>
-    <div style="display:flex;justify-content:space-between;margin-bottom:4px;margin-top:12px;"><span style="font-size:14px;">Financial Indicators</span><span style="font-size:14px;color:var(--primary-on-dark);">15 pts</span></div>
-    <div class="score-bar"><div class="fill" style="width:60%;"></div></div>
-    <div style="display:flex;justify-content:space-between;margin-bottom:4px;margin-top:12px;"><span style="font-size:14px;">Engagement Readiness</span><span style="font-size:14px;color:var(--primary-on-dark);">15 pts</span></div>
-    <div class="score-bar"><div class="fill" style="width:48%;"></div></div>
-    <div style="display:flex;justify-content:space-between;margin-bottom:4px;margin-top:12px;"><span style="font-size:14px;">Market Demand</span><span style="font-size:14px;color:var(--primary-on-dark);">15 pts</span></div>
-    <div class="score-bar"><div class="fill" style="width:70%;"></div></div>
-    <div style="display:flex;justify-content:space-between;margin-bottom:4px;margin-top:12px;"><span style="font-size:14px;">Digital Presence</span><span style="font-size:14px;color:var(--primary-on-dark);">15 pts</span></div>
-    <div class="score-bar"><div class="fill" style="width:55%;"></div></div>
-  </div>
+  <img src="images/screenshot-scoring.png" alt="Scoring Breakdown" style="width:100%;max-width:520px;border-radius:18px;box-shadow: var(--shadow-product);margin-top:32px;" />
   <div class="cta-group" style="margin-top:32px;">
     <span style="display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border-radius:9999px;background:rgba(255,255,255,0.1);font-size:14px;">
       <span style="width:8px;height:8px;border-radius:50%;background:#ff3b30;"></span> HOT ≥ 85
@@ -567,32 +558,32 @@ a:hover { text-decoration: underline; }
   <p class="body-text">Everything you need to manage, track, and convert real estate leads.</p>
   <div class="feature-grid">
     <div class="feature-card reveal">
-      <div class="feature-icon">🤖</div>
+      <img src="images/screenshot-analytics.png" alt="AI Lead Scoring" style="width:100%;height:160px;object-fit:cover;border-radius:12px;margin-bottom:16px;" />
       <h3>AI Lead Scoring</h3>
       <p>6-factor model scores every lead 0–100 with transparent breakdown. HOT/WARM/COLD tiers for instant prioritization.</p>
     </div>
     <div class="feature-card reveal">
-      <div class="feature-icon">📱</div>
+      <img src="images/screenshot-dashboard-leads.png" alt="Mobile CRM Dashboard" style="width:100%;height:160px;object-fit:cover;border-radius:12px;margin-bottom:16px;" />
       <h3>Mobile CRM Dashboard</h3>
       <p>Swipe-style interface: Right (Hot), Left (Not Interested), Up (Maybe). Quick notes and bulk actions on every swipe.</p>
     </div>
     <div class="feature-card reveal">
-      <div class="feature-icon">💬</div>
+      <img src="images/screenshot-crm.png" alt="WhatsApp Outreach" style="width:100%;height:160px;object-fit:cover;border-radius:12px;margin-bottom:16px;" />
       <h3>WhatsApp Outreach</h3>
       <p>50+ personalized message templates with retry logic and deduplication. Send to 50+ agencies in one click.</p>
     </div>
     <div class="feature-card reveal">
-      <div class="feature-icon">💰</div>
+      <img src="images/screenshot-scoring.png" alt="Commission Engine" style="width:100%;height:160px;object-fit:cover;border-radius:12px;margin-bottom:16px;" />
       <h3>Commission Engine</h3>
       <p>10% platform + 3% source splits. Automated late fees (2%/week), TDS deductions, and 60-day suspension enforcement.</p>
     </div>
     <div class="feature-card reveal">
-      <div class="feature-icon">📈</div>
+      <img src="images/screenshot-overview.png" alt="Analytics Dashboard" style="width:100%;height:160px;object-fit:cover;border-radius:12px;margin-bottom:16px;" />
       <h3>Analytics Dashboard</h3>
       <p>Contact rates, reply rates, conversion rates by source and score. Optimization suggestions based on performance gaps.</p>
     </div>
     <div class="feature-card reveal">
-      <div class="feature-icon">🔒</div>
+      <img src="images/screenshot-analytics.png" alt="Legal and Compliance" style="width:100%;height:160px;object-fit:cover;border-radius:12px;margin-bottom:16px;" />
       <h3>Legal & Compliance</h3>
       <p>Service agreements, lead buyer contracts, commission policies, and lead quality SLA included. GDPR compliant.</p>
     </div>
@@ -675,33 +666,7 @@ a:hover { text-decoration: underline; }
 <section class="tile tile-light" id="dashboard">
   <h2>CRM Dashboard</h2>
   <p class="body-text">Swipe-style lead management with real-time scoring and CRM actions.</p>
-  <div style="max-width:800px;width:100%;background:var(--surface-black);border-radius:18px;padding:24px;box-shadow:var(--shadow-product);">
-    <div style="display:flex;gap:8px;margin-bottom:16px;">
-      <span style="padding:4px 12px;border-radius:9999px;background:#ff3b30;color:#fff;font-size:12px;font-weight:600;">HOT</span>
-      <span style="padding:4px 12px;border-radius:9999px;background:#ff9500;color:#fff;font-size:12px;font-weight:600;">WARM</span>
-      <span style="padding:4px 12px;border-radius:9999px;background:var(--primary);color:#fff;font-size:12px;font-weight:600;">COLD</span>
-    </div>
-    <div style="display:flex;flex-direction:column;gap:8px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--surface-tile-1);border-radius:11px;">
-        <div><span style="color:var(--on-dark);font-size:14px;font-weight:600;">ABC Realty</span><span style="color:var(--body-muted);font-size:12px;margin-left:8px;">Sector 62 Noida</span></div>
-        <span style="background:#ff3b30;color:#fff;padding:2px 10px;border-radius:9999px;font-size:11px;font-weight:600;">92 HOT</span>
-      </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--surface-tile-2);border-radius:11px;">
-        <div><span style="color:var(--on-dark);font-size:14px;font-weight:600;">Prime Properties</span><span style="color:var(--body-muted);font-size:12px;margin-left:8px;">Dwarka Delhi</span></div>
-        <span style="background:#ff9500;color:#fff;padding:2px 10px;border-radius:9999px;font-size:11px;font-weight:600;">74 WARM</span>
-      </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--surface-tile-3);border-radius:11px;">
-        <div><span style="color:var(--on-dark);font-size:14px;font-weight:600;">Metro Homes</span><span style="color:var(--body-muted);font-size:12px;margin-left:8px;">Gurgaon</span></div>
-        <span style="background:var(--primary);color:#fff;padding:2px 10px;border-radius:9999px;font-size:11px;font-weight:600;">45 COLD</span>
-      </div>
-    </div>
-    <div style="display:flex;gap:8px;margin-top:16px;">
-      <span style="flex:1;padding:8px;background:#34c759;color:#fff;text-align:center;border-radius:8px;font-size:12px;font-weight:600;">✓ Interested</span>
-      <span style="flex:1;padding:8px;background:#ff3b30;color:#fff;text-align:center;border-radius:8px;font-size:12px;font-weight:600;">✗ Not Interested</span>
-      <span style="flex:1;padding:8px;background:#ff9500;color:#fff;text-align:center;border-radius:8px;font-size:12px;font-weight:600;">? Maybe</span>
-      <span style="flex:1;padding:8px;background:var(--primary);color:#fff;text-align:center;border-radius:8px;font-size:12px;font-weight:600;">↗ Follow Up</span>
-    </div>
-  </div>
+  <img src="images/screenshot-dashboard-leads.png" alt="Dashboard Lead Management" style="width:100%;max-width:800px;border-radius:18px;box-shadow: var(--shadow-product);" />
 </section>
 
 <!-- ===== CTA ===== -->
