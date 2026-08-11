@@ -36,16 +36,13 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
   const [selected, setSelected] = useState<Lead | null>(null);
-  const [apiBase, setApiBase] = useState(
-    process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"
-  );
   const [apiKey] = useState(
     process.env.NEXT_PUBLIC_API_KEY || "changeme"
   );
 
   async function fetchLeads() {
     try {
-      const res = await fetch(`${apiBase}/api/leads?limit=100`, {
+      const res = await fetch(`/api/backend/leads?limit=100`, {
         headers: { "X-API-KEY": apiKey },
       });
       const data = await res.json();
@@ -59,7 +56,7 @@ export default function Dashboard() {
 
   async function updateStatus(leadId: string, status: string) {
     const res = await fetch(
-      `${apiBase}/api/leads/${leadId}/status`,
+      `/api/backend/leads/${leadId}/status`,
       {
         method: "PATCH",
         headers: {
