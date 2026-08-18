@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PropertyVala — Performance & Monetary Benefits</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --primary: #0066cc;
+  --primary-on-dark: #2997ff;
+  --ink: #1d1d1f;
+  --body-muted: #cccccc;
+  --ink-muted-48: #7a7a7a;
+  --canvas: #ffffff;
+  --canvas-parchment: #f5f5f7;
+  --surface-tile-1: #272729;
+  --surface-tile-2: #2a2a2c;
+  --surface-black: #000000;
+  --on-dark: #ffffff;
+  --shadow-product: rgba(0, 0, 0, 0.22) 3px 5px 30px 0;
+  --font-display: 'SF Pro Display', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-text: 'SF Pro Text', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-text);
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.47;
+  letter-spacing: -0.374px;
+  color: var(--ink);
+  background: var(--canvas);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+.tile {
+  width: 100%;
+  padding: 80px 32px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center;
+}
+.tile-light { background: var(--canvas); color: var(--ink); }
+.tile-parchment { background: var(--canvas-parchment); color: var(--ink); }
+.tile-dark { background: var(--surface-tile-1); color: var(--on-dark); }
+.tile h1 {
+  font-family: var(--font-display);
+  font-size: 56px; font-weight: 600; line-height: 1.07;
+  letter-spacing: -0.28px;
+  margin-bottom: 16px;
+}
+.tile h2 {
+  font-family: var(--font-display);
+  font-size: 40px; font-weight: 600; line-height: 1.1;
+  letter-spacing: 0;
+  margin-bottom: 16px;
+}
+.tile .lead {
+  font-family: var(--font-display);
+  font-size: 28px; font-weight: 400; line-height: 1.14;
+  letter-spacing: 0.196px;
+  margin-bottom: 24px;
+  color: var(--ink-muted-48);
+}
+.tile-dark .lead { color: var(--body-muted); }
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+  max-width: 1100px;
+  width: 100%;
+}
+.metric-card {
+  background: var(--canvas);
+  border: 1px solid #e0e0e0;
+  border-radius: 18px;
+  padding: 24px;
+  text-align: left;
+}
+.tile-dark .metric-card { background: var(--surface-tile-2); border-color: rgba(255,255,255,0.06); }
+.metric-card .metric-value {
+  font-family: var(--font-display);
+  font-size: 48px; font-weight: 600; line-height: 1.07;
+  letter-spacing: -0.28px;
+  color: var(--primary);
+}
+.tile-dark .metric-card .metric-value { color: var(--primary-on-dark); }
+.metric-card .metric-label {
+  font-size: 14px; font-weight: 400; line-height: 1.43;
+  color: var(--ink-muted-48);
+  margin-top: 4px;
+}
+.tile-dark .metric-card .metric-label { color: var(--body-muted); }
+.bar {
+  width: 100%; height: 8px;
+  background: var(--canvas-parchment);
+  border-radius: 9999px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+.tile-dark .bar { background: rgba(255,255,255,0.1); }
+.bar .fill {
+  height: 100%;
+  border-radius: 9999px;
+  background: var(--primary);
+}
+.table-wrap {
+  max-width: 900px;
+  width: 100%;
+  overflow-x: auto;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+th, td {
+  border: 1px solid #e0e0e0;
+  padding: 10px 12px;
+  text-align: left;
+}
+th {
+  background: var(--canvas-parchment);
+  font-weight: 600;
+}
+.tile-dark th { background: var(--surface-tile-2); border-color: rgba(255,255,255,0.06); }
+.tile-dark td { border-color: rgba(255,255,255,0.06); }
+.cta-group { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 32px; }
+.btn-primary {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--primary); color: var(--canvas);
+  font-family: var(--font-text); font-size: 17px; font-weight: 400;
+  padding: 11px 22px; border-radius: 9999px;
+  border: none; cursor: pointer;
+  text-decoration: none;
+}
+.btn-secondary-pill {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: transparent; color: var(--primary);
+  font-family: var(--font-text); font-size: 17px; font-weight: 400;
+  padding: 11px 22px; border-radius: 9999px;
+  border: 1px solid var(--primary); cursor: pointer;
+  text-decoration: none;
+}
+@media (max-width: 834px) {
+  .tile { padding: 48px 16px; }
+  .tile h1 { font-size: 34px; }
+  .tile h2 { font-size: 28px; }
+  .metric-card .metric-value { font-size: 36px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<section class="tile tile-light">
+  <h1>Performance & Monetary Benefits</h1>
+  <p class="lead">Real metrics based on system design, 300 buyer-intent leads, and commission engine parameters.</p>
+  <div class="cta-group">
+    <a href="#performance" class="btn-primary">View Performance</a>
+    <a href="#monetary" class="btn-secondary-pill">Revenue Model</a>
+  </div>
+</section>
+
+<!-- ===== PERFORMANCE ===== -->
+<section class="tile tile-parchment" id="performance">
+  <h2>System Performance</h2>
+  <p class="lead" style="max-width:680px;margin:0 auto 32px;">
+    Lead scoring, outreach automation, and CRM workflow performance based on 300 leads processed through 7 modular agents.
+  </p>
+  <div class="metric-grid">
+    <div class="metric-card">
+      <div class="metric-value">300+</div>
+      <div class="metric-label">Buyer-intent leads processed</div>
+      <div class="bar"><div class="fill" style="width:100%;"></div></div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">7</div>
+      <div class="metric-label">AI microservices active</div>
+      <div class="bar"><div class="fill" style="width:100%;"></div></div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">0–100</div>
+      <div class="metric-label">AI scoring range</div>
+      <div class="bar"><div class="fill" style="width:100%;"></div></div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">50+</div>
+      <div class="metric-label">WhatsApp outreach templates</div>
+      <div class="bar"><div class="fill" style="width:85%;"></div></div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">50</div>
+      <div class="metric-label">Agencies targeted for outreach</div>
+      <div class="bar"><div class="fill" style="width:70%;"></div></div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">24/7</div>
+      <div class="metric-label">Autonomous pipeline uptime</div>
+      <div class="bar"><div class="fill" style="width:100%;"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== LEAD QUALITY DISTRIBUTION ===== -->
+<section class="tile tile-dark" id="quality">
+  <h2>Lead Quality Distribution</h2>
+  <p class="lead">HOT / WARM / COLD breakdown from 6-factor AI scoring model.</p>
+  <div class="metric-grid">
+    <div class="metric-card">
+      <div class="metric-value">~15%</div>
+      <div class="metric-label">HOT leads (score ≥ 85)</div>
+      <div class="bar"><div class="fill" style="width:15%; background:#ff3b30;"></div></div>
+      <div style="margin-top:8px;font-size:14px;color:var(--body-muted);">~45 leads</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">~50%</div>
+      <div class="metric-label">WARM leads (60–84)</div>
+      <div class="bar"><div class="fill" style="width:50%; background:#ff9500;"></div></div>
+      <div style="margin-top:8px;font-size:14px;color:var(--body-muted);">~150 leads</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">~35%</div>
+      <div class="metric-label">COLD leads (&lt; 60)</div>
+      <div class="bar"><div class="fill" style="width:35%; background:var(--primary);"></div></div>
+      <div style="margin-top:8px;font-size:14px;color:var(--body-muted);">~105 leads</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MONETARY BENEFITS ===== -->
+<section class="tile tile-light" id="monetary">
+  <h2>Monetary Benefits</h2>
+  <p class="lead" style="max-width:680px;margin:0 auto 32px;">
+    Revenue model based on lead pricing, subscription tiers, and commission engine splits.
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Lead Tier</th>
+          <th>Score Range</th>
+          <th>Price Range (INR)</th>
+          <th>Estimated Qty</th>
+          <th>Potential Revenue</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Cold</strong></td>
+          <td>0–59</td>
+          <td>₹50 – ₹150</td>
+          <td>~105</td>
+          <td>₹5,250 – ₹15,750</td>
+        </tr>
+        <tr>
+          <td><strong>Warm</strong></td>
+          <td>60–84</td>
+          <td>₹150 – ₹500</td>
+          <td>~150</td>
+          <td>₹22,500 – ₹75,000</td>
+        </tr>
+        <tr>
+          <td><strong>Hot</strong></td>
+          <td>85–100</td>
+          <td>₹500 – ₹1,500</td>
+          <td>~45</td>
+          <td>₹22,500 – ₹67,500</td>
+        </tr>
+        <tr>
+          <td><strong>Premium</strong></td>
+          <td>86–100</td>
+          <td>₹1,500 – ₹5,000+</td>
+          <td>~10</td>
+          <td>₹15,000 – ₹50,000+</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="metric-grid" style="margin-top:32px;">
+    <div class="metric-card">
+      <div class="metric-value">₹65K–2L+</div>
+      <div class="metric-label">Potential lead-sale revenue (300 leads)</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">₹5K–15K</div>
+      <div class="metric-label">Monthly subscription revenue per agency</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">10% + 3%</div>
+      <div class="metric-label">Conversion commission splits</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">2%/week</div>
+      <div class="metric-label">Late payment penalty after 15-day grace</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== COMMISSION ENGINE ===== -->
+<section class="tile tile-parchment" id="commission">
+  <h2>Commission Engine</h2>
+  <p class="lead" style="max-width:680px;margin:0 auto 32px;">
+    Automated revenue splits, late fees, TDS, and suspension enforcement.
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Platform</th>
+          <th>Source</th>
+          <th>Use Case</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Conversion</strong></td>
+          <td>10%</td>
+          <td>3%</td>
+          <td>When a lead closes a property deal</td>
+        </tr>
+        <tr>
+          <td><strong>Lead Sale</strong></td>
+          <td>70%</td>
+          <td>30%</td>
+          <td>When a lead is sold to an agency</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="metric-grid" style="margin-top:32px;">
+    <div class="metric-card">
+      <div class="metric-value">15 days</div>
+      <div class="metric-label">Grace period</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">60 days</div>
+      <div class="metric-label">Suspension threshold</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">1%</div>
+      <div class="metric-label">TDS under Section 194H</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">Auto</div>
+      <div class="metric-label">Enforcement via orchestrator</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ROI PROJECTION ===== -->
+<section class="tile tile-dark" id="roi">
+  <h2>ROI Projection</h2>
+  <p class="lead">Based on 300 leads, 10% conversion rate, and average deal value.</p>
+  <div class="metric-grid">
+    <div class="metric-card">
+      <div class="metric-value">30</div>
+      <div class="metric-label">Estimated conversions (10% of 300)</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">₹10L–30L</div>
+      <div class="metric-label">Estimated deal value (avg ₹3–10L per deal)</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">₹1L–3L+</div>
+      <div class="metric-label">Platform commission (10% of deal value)</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">₹30K–90K+</div>
+      <div class="metric-label">Source commission (3% of deal value)</div>
+    </div>
+  </div>
+  <div class="cta-group">
+    <a href="docs/dashboard_guide.html" class="btn-secondary-pill">View Dashboard Guide</a>
+    <a href="https://github.com/MrHTC/AGENTIC-LEAD-ENGINE" class="btn-secondary-pill">View on GitHub</a>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="tile tile-parchment" style="padding:32px;">
+  <div style="font-size:14px;color:var(--ink-muted-48);">
+    PropertyVala — Performance & Monetary Benefits Report. Figures are estimates based on system parameters and 300-lead dataset. Actual results may vary.
+  </div>
+</footer>
+
+</body>
+</html>

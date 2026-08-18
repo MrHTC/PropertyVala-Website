@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PropertyVala — Services & Scaling Roadmap</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --primary: #0066cc;
+  --primary-focus: #0071e3;
+  --primary-on-dark: #2997ff;
+  --ink: #1d1d1f;
+  --body: #1d1d1f;
+  --body-on-dark: #ffffff;
+  --body-muted: #cccccc;
+  --ink-muted-80: #333333;
+  --ink-muted-48: #7a7a7a;
+  --divider-soft: #f0f0f0;
+  --hairline: #e0e0e0;
+  --canvas: #ffffff;
+  --canvas-parchment: #f5f5f7;
+  --surface-pearl: #fafafc;
+  --surface-tile-1: #272729;
+  --surface-tile-2: #2a2a2c;
+  --surface-tile-3: #252527;
+  --surface-black: #000000;
+  --surface-chip: rgba(210, 210, 215, 0.64);
+  --on-primary: #ffffff;
+  --on-dark: #ffffff;
+  --shadow-product: rgba(0, 0, 0, 0.22) 3px 5px 30px 0;
+  --font-display: 'SF Pro Display', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-text: 'SF Pro Text', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-text);
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.47;
+  letter-spacing: -0.374px;
+  color: var(--ink);
+  background: var(--canvas);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--primary); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.global-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: var(--surface-black);
+  height: 44px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px;
+  font-family: var(--font-text);
+  font-size: 12px; font-weight: 400; letter-spacing: -0.12px;
+  color: var(--on-dark);
+}
+.global-nav .logo { font-weight: 600; font-size: 14px; letter-spacing: -0.02em; }
+.global-nav .nav-links { display: flex; gap: 24px; align-items: center; }
+.global-nav .nav-links a { color: var(--body-muted); font-size: 12px; letter-spacing: -0.12px; }
+.global-nav .nav-links a:hover { color: var(--on-dark); text-decoration: none; }
+.global-nav .nav-actions { display: flex; gap: 16px; align-items: center; }
+.global-nav .nav-actions a { color: var(--body-muted); font-size: 12px; }
+.global-nav .nav-actions a:hover { color: var(--on-dark); text-decoration: none; }
+
+.sub-nav {
+  position: sticky; top: 44px; z-index: 999;
+  background: var(--canvas-parchment);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  height: 52px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px;
+  font-family: var(--font-display);
+  font-size: 21px; font-weight: 600; letter-spacing: 0.231px;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+.sub-nav .sub-nav-left { display: flex; align-items: center; gap: 24px; }
+.sub-nav .sub-nav-left span { color: var(--ink-muted-48); font-size: 14px; font-weight: 400; }
+.sub-nav .sub-nav-right { display: flex; gap: 20px; align-items: center; }
+.sub-nav .sub-nav-right a { color: var(--ink); font-size: 14px; font-weight: 400; }
+.sub-nav .sub-nav-right a:hover { color: var(--primary); text-decoration: none; }
+
+.btn-primary {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--primary); color: var(--on-primary);
+  font-family: var(--font-text); font-size: 17px; font-weight: 400;
+  padding: 11px 22px; border-radius: 9999px;
+  border: none; cursor: pointer;
+  text-decoration: none;
+}
+.btn-primary:hover { text-decoration: none; opacity: 0.9; }
+.btn-primary:active { transform: scale(0.95); }
+
+.btn-secondary-pill {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: transparent; color: var(--primary);
+  font-family: var(--font-text); font-size: 17px; font-weight: 400;
+  padding: 11px 22px; border-radius: 9999px;
+  border: 1px solid var(--primary); cursor: pointer;
+  text-decoration: none;
+}
+.btn-secondary-pill:hover { text-decoration: none; }
+.btn-secondary-pill:active { transform: scale(0.95); }
+
+.tile {
+  width: 100%;
+  padding: 80px 32px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center;
+}
+.tile-light { background: var(--canvas); color: var(--ink); }
+.tile-parchment { background: var(--canvas-parchment); color: var(--ink); }
+.tile-dark { background: var(--surface-tile-1); color: var(--on-dark); }
+.tile h1 {
+  font-family: var(--font-display);
+  font-size: 56px; font-weight: 600; line-height: 1.07;
+  letter-spacing: -0.28px;
+  margin-bottom: 16px;
+}
+.tile h2 {
+  font-family: var(--font-display);
+  font-size: 40px; font-weight: 600; line-height: 1.1;
+  letter-spacing: 0;
+  margin-bottom: 16px;
+}
+.tile .lead {
+  font-family: var(--font-display);
+  font-size: 28px; font-weight: 400; line-height: 1.14;
+  letter-spacing: 0.196px;
+  margin-bottom: 24px;
+  color: var(--ink-muted-48);
+}
+.tile-dark .lead { color: var(--body-muted); }
+.tile .body-text {
+  max-width: 680px;
+  font-size: 17px; font-weight: 400; line-height: 1.47;
+  letter-spacing: -0.374px;
+  margin-bottom: 32px;
+  color: var(--ink-muted-80);
+}
+.tile-dark .body-text { color: var(--body-muted); }
+.cta-group { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+
+.table-wrap {
+  max-width: 1100px;
+  width: 100%;
+  overflow-x: auto;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+th, td {
+  border: 1px solid var(--hairline);
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: top;
+}
+th {
+  background: var(--canvas-parchment);
+  font-weight: 600;
+}
+.tile-dark th { background: var(--surface-tile-2); border-color: rgba(255,255,255,0.06); }
+.tile-dark td { border-color: rgba(255,255,255,0.06); }
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.badge-green { background: #064e3b; color: #34d399; }
+.badge-blue { background: #1e3a5f; color: #60a5fa; }
+.badge-amber { background: #422006; color: #fbbf24; }
+.badge-red { background: #450a0a; color: #f87171; }
+.badge-purple { background: #2e1065; color: #c084fc; }
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+  max-width: 1100px;
+  width: 100%;
+}
+.metric-card {
+  background: var(--canvas);
+  border: 1px solid var(--hairline);
+  border-radius: 18px;
+  padding: 24px;
+  text-align: left;
+}
+.tile-dark .metric-card { background: var(--surface-tile-2); border-color: rgba(255,255,255,0.06); }
+.metric-card .metric-value {
+  font-family: var(--font-display);
+  font-size: 36px; font-weight: 600; line-height: 1.07;
+  letter-spacing: -0.28px;
+  color: var(--primary);
+}
+.tile-dark .metric-card .metric-value { color: var(--primary-on-dark); }
+.metric-card .metric-label {
+  font-size: 13px; font-weight: 400; line-height: 1.43;
+  color: var(--ink-muted-48);
+  margin-top: 4px;
+}
+.tile-dark .metric-card .metric-label { color: var(--body-muted); }
+.bar {
+  width: 100%; height: 6px;
+  background: var(--canvas-parchment);
+  border-radius: 9999px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+.tile-dark .bar { background: rgba(255,255,255,0.1); }
+.bar .fill {
+  height: 100%;
+  border-radius: 9999px;
+  background: var(--primary);
+}
+
+.footer {
+  background: var(--canvas-parchment);
+  padding: 32px;
+  font-size: 12px; font-weight: 400; line-height: 1.3;
+  letter-spacing: -0.08px;
+  color: var(--ink-muted-48);
+  text-align: center;
+}
+
+@media (max-width: 834px) {
+  .tile { padding: 48px 16px; }
+  .tile h1 { font-size: 34px; }
+  .tile h2 { font-size: 28px; }
+  .metric-card .metric-value { font-size: 28px; }
+  table { font-size: 12px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== GLOBAL NAV ===== -->
+<nav class="global-nav">
+  <div class="logo">PropertyVala</div>
+  <div class="nav-links">
+    <a href="../index.html">Home</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="performance-report.html">Performance</a>
+  </div>
+  <div class="nav-actions">
+    <a href="../index.html#get-started" class="btn-primary" style="padding:6px 16px; font-size:12px;">Get Leads</a>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="tile tile-light">
+  <h1>Services & Scaling Roadmap</h1>
+  <p class="lead">Tabular checklist of services, market demand, ICPs, and path to $10k MRR.</p>
+  <div class="cta-group">
+    <a href="#propertyvala-services" class="btn-primary">PropertyVala Services</a>
+    <a href="#htanc-services" class="btn-secondary-pill">HTANC-HFT</a>
+  </div>
+</section>
+
+<!-- ===== PROPERTYVALA SERVICES ===== -->
+<section class="tile tile-parchment" id="propertyvala-services">
+  <h2>PropertyVala Services</h2>
+  <p class="body-text">Real estate lead generation and CRM platform services.</p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Service</th>
+          <th>Dev Status</th>
+          <th>UAT/QA</th>
+          <th>Production</th>
+          <th>Market Demand</th>
+          <th>ICPs</th>
+          <th>$10k MRR Plan</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>AI Lead Scoring</strong></td>
+          <td><span class="badge badge-green">Done</span></td>
+          <td><span class="badge badge-blue">Pending</span></td>
+          <td><span class="badge badge-red">No</span></td>
+          <td>High</td>
+          <td>RE agencies, brokerages</td>
+          <td>10 agencies × $500/mo = $5k/mo</td>
+        </tr>
+        <tr>
+          <td><strong>Buyer-Intent Lead Generation</strong></td>
+          <td><span class="badge badge-green">Done</span></td>
+          <td><span class="badge badge-blue">Pending</span></td>
+          <td><span class="badge badge-red">No</span></td>
+          <td>Very High</td>
+          <td>Brokerages, developers</td>
+          <td>200 leads/mo × $50 = $10k/mo</td>
+        </tr>
+        <tr>
+          <td><strong>WhatsApp Outreach Automation</strong></td>
+          <td><span class="badge badge-green">Done</span></td>
+          <td><span class="badge badge-blue">Pending</span></td>
+          <td><span class="badge badge-red">No</span></td>
+          <td>Medium-High</td>
+          <td>Agencies with 50+ agents</td>
+          <td>20 agencies × $500/mo = $10k/mo</td>
+        </tr>
+        <tr>
+          <td><strong>Mobile CRM Dashboard</strong></td>
+          <td><span class="badge badge-green">Done</span></td>
+          <td><span class="badge badge-blue">Pending</span></td>
+          <td><span class="badge badge-red">No</span></td>
+          <td>High</td>
+          <td>Small-medium agencies</td>
+          <td>30 seats × $150/mo = $4.5k/mo</td>
+        </tr>
+        <tr>
+          <td><strong>Commission Engine</strong></td>
+          <td><span class="badge badge-green">Done</span></td>
+          <td><span class="badge badge-blue">Pending</span></td>
+          <td><span class="badge badge-red">No</span></td>
+          <td>Medium</td>
+          <td>Platform owners, franchises</td>
+          <td>10% on deal value; ₹1L+ deals = $1k+/mo</td>
+        </tr>
+        <tr>
+          <td><strong>Analytics & Optimization</strong></td>
+          <td><span class="badge badge-green">Done</span></td>
+          <td><span class="badge badge-blue">Pending</span></td>
+          <td><span class="badge badge-red">No</span></td>
+          <td>Medium</td>
+          <td>Growth-stage agencies</td>
+          <td>25 agencies × $200/mo = $5k/mo</td>
+        </tr>
+        <tr>
+          <td><strong>Conversion & Deal Routing</strong></td>
+          <td><span class="badge badge-green">Done</span></td>
+          <td><span class="badge badge-blue">Pending</span></td>
+          <td><span class="badge badge-red">No</span></td>
+          <td>Medium-High</td>
+          <td>Agencies with high-ticket deals</td>
+          <td>0.5–2% of deal value; $3k–$10k/mo</td>
+        </tr>
+        <tr>
+          <td><strong>Sales & Follow-up Bot</strong></td>
+          <td><span class="badge badge-green">Done</span></td>
+          <td><span class="badge badge-blue">Pending</span></td>
+          <td><span class="badge badge-red">No</span></td>
+          <td>Low-Medium</td>
+          <td>Agencies wanting 24/7 follow-up</td>
+          <td>50 agencies × $100/mo = $5k/mo</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== SCALING TO $10K MRR ===== -->
+<section class="tile tile-dark" id="scaling">
+  <h2>Scaling to $10k MRR</h2>
+  <p class="lead">Three revenue paths combined to reach $10,000/month.</p>
+  <div class="metric-grid">
+    <div class="metric-card">
+      <div class="metric-value">Path A</div>
+      <div class="metric-label">Subscriptions</div>
+      <div style="margin-top:8px;font-size:14px;color:var(--body-muted);">10 Growth @ $500 + 20 Starter @ $200 + overages = ~$3,600/mo</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">Path B</div>
+      <div class="metric-label">Lead Sales</div>
+      <div style="margin-top:8px;font-size:14px;color:var(--body-muted);">1,000 leads/mo × avg $18/lead = ~$18,000/mo gross</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">Path C</div>
+      <div class="metric-label">Deal Commissions</div>
+      <div style="margin-top:8px;font-size:14px;color:var(--body-muted);">200 deals/mo × avg $60 commission = ~$12,000/mo gross</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">$10k MRR</div>
+      <div class="metric-label">Target</div>
+      <div style="margin-top:8px;font-size:14px;color:var(--body-muted);">Mix of subscriptions + lead sales + commissions</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HTANC-HFT ===== -->
+<section class="tile tile-light" id="htanc-services">
+  <h2>HTANC-HFT</h2>
+  <p class="lead">Separate high-frequency trading platform — not part of PropertyVala lead-gen services.</p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Service</th>
+          <th>Dev Status</th>
+          <th>Market Demand</th>
+          <th>ICPs</th>
+          <th>Pricing Model</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Algo Trading Engine</strong></td>
+          <td><span class="badge badge-green">Done</span></td>
+          <td>Low for RE, High for trading</td>
+          <td>Algo traders, quant funds</td>
+          <td>$500–$5,000/mo</td>
+        </tr>
+        <tr>
+          <td><strong>Telegram Signal Bot</strong></td>
+          <td><span class="badge badge-green">Done</span></td>
+          <td>Medium</td>
+          <td>Retail traders</td>
+          <td>$100–$500/mo</td>
+        </tr>
+        <tr>
+          <td><strong>Broker Integration</strong></td>
+          <td><span class="badge badge-blue">In Progress</span></td>
+          <td>Medium</td>
+          <td>Active traders</td>
+          <td>0.01–0.05% of trade value</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="cta-group">
+    <a href="https://github.com/MrHTC/HTANC-HFT" class="btn-secondary-pill">View on GitHub</a>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  PropertyVala — Services & Scaling Roadmap. Figures are estimates based on market research and system parameters. Actual results may vary.
+</footer>
+
+</body>
+</html>
